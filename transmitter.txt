@@ -1,0 +1,29 @@
+
+#include <VirtualWire.h>
+
+
+const int transmit_pin = 12;
+
+
+void setup() {
+  // put your setup code here, to run once:
+    Serial.begin(9600);
+    vw_set_tx_pin(transmit_pin);
+    vw_setup(2000);       // Bits per sec
+    pinMode(13, OUTPUT);
+
+}
+
+void loop()
+{
+  
+  
+  char *msg2 ="1";
+  digitalWrite(13, HIGH); // Flash a light to show transmitting
+  vw_send((uint8_t *)msg2, strlen(msg2));
+  vw_wait_tx(); // Wait until the whole message is gone
+  digitalWrite(13, LOW);
+  
+}
+
+

@@ -1,0 +1,77 @@
+#include <NewPing.h>
+
+#define TRIGGER_PIN  12  // Arduino pin tied to trigger pin on the ultrasonic sensor.
+#define ECHO_PIN     11 // Arduino pin tied to echo pin on the ultrasonic sensor.
+#define MAX_DISTANCE 200 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+int leftmotorforward =10;
+ int leftmotor2forward=9;
+ int rightmotorforward=6;
+ int rightmotor2forward=5;
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+void setup() {
+  // put your setup code here, to run once:
+
+   pinMode(13,OUTPUT);//set digitalpin 13 as output
+   pinMode(4,INPUT);//set digitalpin 4 as intput
+   pinMode(leftmotorforward,OUTPUT);//set digitalpin 10 as output
+   pinMode(leftmotor2forward,OUTPUT);//set digitalpin 9 as output
+   pinMode(rightmotorforward,OUTPUT);//set digitalpin 6 as output
+   pinMode(rightmotor2forward,OUTPUT);// set digitalpin 5 as output
+   
+}
+
+void loop() {
+
+  unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
+  long distance= uS / US_ROUNDTRIP_CM ;//distance calculated as cm
+   
+  if(digitalRead(4)==HIGH && distance>25)
+  {
+    digitalWrite(13,LOW);
+    speedcontrol();
+    
+  }
+ 
+ else{
+  if(distance <25){
+  off();  }
+  else{
+  digitalWrite(13,HIGH);
+  driveforward();
+ }
+ }
+
+}
+ void speedcontrol()
+{
+  analogWrite(leftmotorforward,100);
+  analogWrite(leftmotor2forward,100);
+  analogWrite(rightmotorforward,100);
+  analogWrite(rightmotor2forward,100);
+  delay(1000);
+  analogWrite(leftmotorforward,0);
+  analogWrite(leftmotor2forward,0);
+  analogWrite(rightmotorforward,0);
+  analogWrite(rightmotor2forward,0);
+
+}
+void off()
+{
+  digitalWrite(leftmotorforward,LOW);
+  digitalWrite(leftmotor2forward,LOW);
+  digitalWrite(rightmotorforward,LOW);
+  digitalWrite(rightmotor2forward,LOW);
+}
+
+void driveforward()
+{ 
+  digitalWrite(leftmotorforward,HIGH);
+  digitalWrite(leftmotor2forward,HIGH);
+  digitalWrite(rightmotorforward,HIGH);
+  digitalWrite(rightmotor2forward,HIGH);
+  
+}
+
+ 
+
+ 
